@@ -164,19 +164,6 @@ function App() {
     setNumber(0)
     setLocked(false)
     setShowSuggestions(false)
-
-    const { error } = await supabase
-      .from('shared_state')
-      .update({
-        selected_name: '',
-        number_value: 0,
-        locked: false,
-      })
-      .eq('id', 1)
-
-    if (error) {
-      console.error('Error clearing name:', error)
-    }
   }
 
   // Cambio locale numero
