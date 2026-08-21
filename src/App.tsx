@@ -351,23 +351,22 @@ function App() {
               />
             </div>
           )}
-
-
         </div>
 
-
-        <button
-          onClick={handleConfirm}
-          disabled={!isUserB || locked}
-          style={{
-            height: '60px',
-            width: '100px',
-            fontSize: '20px',
-            marginTop: '20px',
-          }}
-        >
-          FUORI
-        </button>
+        {isUserB && (
+          <button
+            onClick={handleConfirm}
+            disabled={!isUserB || locked}
+            style={{
+              height: '60px',
+              width: '100px',
+              fontSize: '20px',
+              marginTop: '20px',
+            }}
+          >
+            FUORI
+          </button>
+        )}
 
 
         {locked && (
