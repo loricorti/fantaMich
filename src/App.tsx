@@ -110,6 +110,28 @@ function App() {
     }
   }
 
+  async function handleClearName() {
+
+    setSelectedName('')
+    setSearchText('')
+    setNumber(0)
+    setLocked(false)
+    setShowSuggestions(false)
+
+    const { error } = await supabase
+      .from('shared_state')
+      .update({
+        selected_name: '',
+        number_value: 0,
+        locked: false,
+      })
+      .eq('id', 1)
+
+    if (error) {
+      console.error('Error clearing name:', error)
+    }
+  }
+
 
   // Cambio numero
   async function handleNumberChange(
@@ -150,166 +172,246 @@ function App() {
 
 
   return (
-    <div style={{
-      maxWidth: '800px',
-      margin: '50px auto',
-      padding: '60px',
-    }}>
+    <div
+      style={{
+        width: '100%',
+        minHeight: '100vh',
+        display: 'flex',
+        justifyContent: 'center',
+      }}>
 
-      <h1 style={{ marginBottom: '100px' }}>Asta di Michelangelo Tentori</h1>
+      <div style={{
+        maxWidth: '800px',
+        marginLeft: '50px',
+        marginRight: '50px',
+        paddingLeft: '60px',
+        paddingRight: '60px',
+        paddingTop: '20px',
+        paddingBottom: '20px',
+        backgroundColor: '#9af6c0',
+      }}>
 
-      <div style={{ marginBottom: '60px' }}>
+        <h1 style={{ marginBottom: '60px' }}>Asta di Michelangelo Tentori</h1>
 
-        <label style={{
-          fontSize: '30px',
-          marginBottom: '20px',
-        }}>
-          Giocatore
-        </label>
+        <div style={{ marginBottom: '60px' }}>
 
-        <br />
+          <label style={{
+            fontSize: '30px',
+            marginBottom: '30px',
+          }}>
+            Giocatore
+          </label>
 
-        {isUserA ? (
-          <div
-            style={{
-              position: 'relative',
-              width: '100%',
-              padding: '10px',
-              marginTop: '5px',
-            }}
-          >
-            <input
-              type="text"
-              value={searchText}
-              placeholder="Cerca un nome..."
-              onChange={(event) => {
-                setSearchText(event.target.value)
-                setShowSuggestions(true)
-              }}
-              onFocus={() => {
-                setShowSuggestions(true)
-              }}
+          <br />
+
+          {isUserA ? (
+            <div
               style={{
+                position: 'relative',
                 width: '100%',
-                padding: '10px',
-                boxSizing: 'border-box',
-                border: '1px solid #cccccc',
-                borderRadius: '6px',
-                height: '50px',
-                fontSize: '22px',
-                textAlign: 'center',
+                marginTop: '5px',
               }}
-            />
-
-            {showSuggestions && filteredNames.length > 0 && (
-              <div
+            >
+              <input
+                type="text"
+                value={searchText}
+                placeholder="Cerca un nome..."
+                onChange={(event) => {
+                  setSearchText(event.target.value)
+                  setShowSuggestions(true)
+                }}
+                onFocus={() => {
+                  setShowSuggestions(true)
+                }}
                 style={{
-                  position: 'absolute',
-                  top: '100%',
-                  left: 0,
-                  right: 0,
-                  backgroundColor: 'white',
+                  width: '100%',
+                  padding: '10px',
+                  boxSizing: 'border-box',
                   border: '1px solid #cccccc',
                   borderRadius: '6px',
-                  marginTop: '2px',
-                  zIndex: 10,
-                  maxHeight: '300px',
-                  overflowY: 'auto',
+                  height: '50px',
+                  fontSize: '22px',
+                  textAlign: 'center',
                 }}
-              >
-                {filteredNames.map(name => (
-                  <div
-                    key={name}
-                    onClick={() => {
-                      handleNameChange(name)
-                      setSearchText(name)
-                      setShowSuggestions(false)
-                    }}
-                    style={{
-                      padding: '10px',
-                      cursor: 'pointer',
-                    }}
-                  >
-                    {name}
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-        ) : (
-          <p
-            style={{
-              margin: '5px 0 0 0',
-              padding: '10px',
-              fontSize: '40px',
-              color: '#000000',
-              fontWeight: 'bold',
-            }}
-          >
-            {selectedName}
+              />
+
+              {searchText && (
+                <button
+                  type="button"
+                  onMouseDown={(event) => {
+                    event.preventDefault()
+                  }}
+                  onClick={handleClearName}
+                  style={{
+                    position: 'absolute',
+                    right: '20px',
+                    top: '50%',
+                    transform: 'translateY(-50%)',
+                    border: 'none',
+                    background: 'transparent',
+                    cursor: 'pointer',
+                    fontSize: '30px',
+                    padding: '4px',
+                  }}
+                >
+                  ×
+                </button>
+              )}
+
+              {showSuggestions && filteredNames.length > 0 && (
+                <div
+                  style={{
+                    position: 'absolute',
+                    top: '100%',
+                    left: 0,
+                    right: 0,
+                    backgroundColor: 'white',
+                    border: '1px solid #cccccc',
+                    borderRadius: '6px',
+                    marginTop: '2px',
+                    zIndex: 10,
+                    maxHeight: '300px',
+                    overflowY: 'auto',
+                  }}
+                >
+                  {filteredNames.map((name, index) => (
+                    <div
+                      key={name}
+                      onClick={() => {
+                        handleNameChange(name)
+                        setSearchText(name)
+                        setShowSuggestions(false)
+                      }}
+                      style={{
+                        padding: '10px',
+                        cursor: 'pointer',
+                        borderBottom: index < filteredNames.length - 1 ? '1px solid #aba6a6' : 'none',
+                      }}
+                    >
+                      {name}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          ) : (
+            <p
+              style={{
+                margin: '5px 0 0 0',
+                padding: '10px',
+                fontSize: '40px',
+                color: '#000000',
+                fontWeight: 'bold',
+              }}
+            >
+              {selectedName}
+            </p>
+          )}
+        </div>
+
+
+        <div style={{ marginBottom: '20px' }}>
+
+          <label style={{
+            fontSize: '30px',
+            marginBottom: '20px',
+          }}>
+            Valore offerto
+          </label>
+
+          {isUserA ? (
+            <label style={{
+              fontSize: '30px',
+              marginLeft: '20px',
+            }}>
+              {number}M
+            </label>
+          ) : (
+            <div>
+              <br />
+
+              <input
+                type="number"
+                value={number}
+                disabled={!isUserB || locked}
+                onChange={handleNumberChange}
+                style={{
+                  width: '100.px',
+                  backgroundColor: locked ? '#3a3a3a' : '#ffffff',
+                  color: locked ? '#ffffff' : '#000000',
+                  border: locked ? '1px solid #555555' : '1px solid #cccccc',
+                  borderRadius: '6px',
+                  cursor: locked ? 'not-allowed' : 'text',
+                  opacity: 1,
+                  height: '50px',
+                  fontSize: '22px',
+                  textAlign: 'center'
+                }}
+
+              />
+            </div>
+          )}
+
+
+        </div>
+
+
+        <button
+          onClick={handleConfirm}
+          disabled={!isUserB || locked}
+          style={{
+            height: '60px',
+            width: '100px',
+            fontSize: '20px',
+            marginTop: '20px',
+          }}
+        >
+          FUORI
+        </button>
+
+
+        {locked && (
+          <p style={{
+            marginTop: '30px',
+            fontWeight: 'bold',
+            fontSize: '30px',
+          }}>
+            Mich Tentori è fuori dall'asta per {selectedName}.
           </p>
         )}
-      </div>
 
-
-      <div style={{ marginBottom: '20px' }}>
-
-        <label style={{
-          fontSize: '30px',
-          marginBottom: '20px',
-        }}>
-          Valore
-        </label>
-
-        <br />
-
-        <input
-          type="number"
-          value={number}
-          disabled={!isUserB || locked}
-          onChange={handleNumberChange}
+        <div
           style={{
-            width: '100%',
-            padding: '10px',
-            boxSizing: 'border-box',
-            backgroundColor: locked ? '#3a3a3a' : '#ffffff',
-            color: locked ? '#ffffff' : '#000000',
-            border: locked ? '1px solid #555555' : '1px solid #cccccc',
-            borderRadius: '6px',
-            cursor: locked ? 'not-allowed' : 'text',
-            opacity: 1,
-            height: '50px',
-            fontSize: '22px',
-            textAlign: 'center'
+            marginTop: '40px',
+            display: 'flex',
+            gap: '20px',
+            alignItems: 'center',
           }}
-        />
+        >
+          <img
+            src="/robin_hood.jpeg"
+            alt=""
+            style={{
+              width: '50%',
+              maxWidth: '600px',
+              height: 'auto',
+              borderRadius: '8px',
+            }}
+          />
+
+          <img
+            src="/squadra_ginew.jpeg"
+            alt=""
+            style={{
+              width: '50%',
+              maxWidth: '600px',
+              height: 'auto',
+              borderRadius: '8px',
+            }}
+          />
+        </div>
 
       </div>
-
-
-      <button
-        onClick={handleConfirm}
-        disabled={!isUserB || locked}
-        style={{
-          height: '60px',
-          width: '100px',
-          fontSize: '20px',
-          marginTop: '20px',
-        }}
-      >
-        FUORI
-      </button>
-
-
-      {locked && (
-        <p style={{
-          marginTop: '20px',
-          fontWeight: 'bold',
-        }}>
-          Mich Tentori è fuori dall'asta per {selectedName}.
-        </p>
-      )}
-
     </div>
   )
 }
