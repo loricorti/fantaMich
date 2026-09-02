@@ -266,7 +266,7 @@ function App() {
                   border: '1px solid #cccccc',
                   borderRadius: '6px',
                   height: '130px',
-                  fontSize: '50px',
+                  fontSize: '80px',
                   textAlign: 'center',
                 }}
               />
