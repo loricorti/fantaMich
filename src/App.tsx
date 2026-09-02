@@ -71,6 +71,7 @@ function App() {
 
   const isUserA = role === 'A'
   const isUserB = role === 'B'
+  const isUserC = role === 'C'
 
   useEffect(() => {
 
@@ -212,7 +213,7 @@ function App() {
         minHeight: '100vh',
         display: 'flex',
         justifyContent: 'center',
-        backgroundColor: '#f6d09a',
+        backgroundColor: '#1e1a30',
       }}>
 
       <div style={{
@@ -226,12 +227,13 @@ function App() {
       }}>
 
         <div style={{
-          marginBottom: '100px',
+          marginBottom: isUserB ? '80px' : '200px',
           marginTop: '30px',
         }}>
 
           <label style={{
-            fontSize: '40px',
+            fontSize: '70px',
+            color: '#ffffff',
           }}>
             Giocatore
           </label>
@@ -243,7 +245,7 @@ function App() {
               style={{
                 position: 'relative',
                 width: '100%',
-                marginTop: '20px',
+                marginTop: '40px',
               }}
             >
               <input
@@ -263,8 +265,8 @@ function App() {
                   boxSizing: 'border-box',
                   border: '1px solid #cccccc',
                   borderRadius: '6px',
-                  height: '80px',
-                  fontSize: '60px',
+                  height: '130px',
+                  fontSize: '50px',
                   textAlign: 'center',
                 }}
               />
@@ -333,10 +335,10 @@ function App() {
               style={{
                 margin: '5px 0 0 0',
                 padding: '10px',
-                fontSize: '60px',
-                color: '#000000',
+                fontSize: '100px',
+                color: '#ffffff',
                 fontWeight: 'bold',
-                marginTop: '20px',
+                marginTop: '80px',
               }}
             >
               {selectedName}
@@ -347,16 +349,16 @@ function App() {
 
         <div style={{ marginBottom: '40px' }}>
 
-          {isUserA ? (
+          {isUserA || isUserC ? (
             <div>
               <label style={{
-                fontSize: '60px',
+                fontSize: '100px',
               }}>
                 Offerta Mich:
               </label>
 
               <label style={{
-                fontSize: '60px',
+                fontSize: '100px',
                 marginLeft: '30px',
               }}>
                 {number === 0 || fuoriDallAsta ? '-' : number}
@@ -472,48 +474,47 @@ function App() {
         </div>
 
         {fuoriDallAsta && (
-          <p style={{
-            marginTop: '30px',
-            fontWeight: 'bold',
-            fontSize: '50px',
-          }}>
-            {isUserA ?
-              `Mich è fuori dall'asta.`
-              : `Sei fuori dall'asta per ${selectedName}.`
-            }
-          </p>
+          <div
+            style={{
+              marginTop: isUserB ? '50px' : '80px',
+              display: 'flex',
+              gap: '10px',
+              justifyContent: 'center',
+            }}
+          >
+            <img
+              src="/robin_hood.jpeg"
+              alt=""
+              style={{
+                maxWidth: '300px',
+                height: 'auto',
+                borderRadius: '8px',
+              }}
+            />
+
+            <p style={{
+              fontWeight: 'bold',
+              fontSize: isUserB ? '40px' : '80px',
+              lineHeight: '80px',
+              height: '200px',
+            }}>
+              {isUserB ?
+                `Sei fuori dall'asta per ${selectedName}.`
+                : `Mich è fuori dall'asta.`
+              }
+            </p>
+
+            <img
+              src="/squadra_ginew.jpeg"
+              alt=""
+              style={{
+                maxWidth: '300px',
+                height: 'auto',
+                borderRadius: '8px',
+              }}
+            />
+          </div>
         )}
-
-        <div
-          style={{
-            marginTop: '40px',
-            display: 'flex',
-            gap: '100px',
-            justifyContent: 'center',
-          }}
-        >
-          <img
-            src="/robin_hood.jpeg"
-            alt=""
-            style={{
-              width: '40%',
-              maxWidth: '600px',
-              height: 'auto',
-              borderRadius: '8px',
-            }}
-          />
-
-          <img
-            src="/squadra_ginew.jpeg"
-            alt=""
-            style={{
-              width: '40%',
-              maxWidth: '600px',
-              height: 'auto',
-              borderRadius: '8px',
-            }}
-          />
-        </div>
       </div>
     </div>
   )
