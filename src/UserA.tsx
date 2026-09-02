@@ -11,14 +11,17 @@ type UserAProps = {
 
 function UserA({ onNameChange, onClearName }: UserAProps) {
     const [selectedCategory, setSelectedCategory] = useState('Portieri')
-
     const [searchText, setSearchText] = useState('')
     const [showSuggestions, setShowSuggestions] = useState(false)
+    const [selectedPlayers, setSelectedPlayers] = useState<string[]>([])
 
-    const filteredNames = selectedCategory === 'Portieri' ? portieri :
-        selectedCategory === 'Difensori' ? difensori :
-        selectedCategory === 'Centrocampisti' ? centrocampisti :
-        attaccanti
+    const categoryNames =
+        selectedCategory === 'Portieri' ? portieri :
+            selectedCategory === 'Difensori' ? difensori :
+                selectedCategory === 'Centrocampisti' ? centrocampisti :
+                    attaccanti
+
+    const filteredNames = categoryNames
         .filter(name =>
             name.toLowerCase().includes(searchText.toLowerCase())
         )
@@ -33,7 +36,20 @@ function UserA({ onNameChange, onClearName }: UserAProps) {
     function handleNameChange(name: string) {
         setSearchText(name)
         setShowSuggestions(false)
+        setSelectedPlayers(prev => {
+            if (prev.includes(name)) {
+                return prev
+            }
+
+            return [...prev, name]
+        })
         onNameChange(name)
+    }
+
+    function removePlayer(name: string) {
+        setSelectedPlayers(prev =>
+            prev.filter(player => player !== name)
+        )
     }
 
     return (
@@ -45,17 +61,10 @@ function UserA({ onNameChange, onClearName }: UserAProps) {
                     margin: '0 0 16px 0',
                 }}
             >
-                <legend
-                    style={{
-                        fontSize: '28px',
-                        marginBottom: '10px',
-                    }}
-                >
-                    Categoria
-                </legend>
 
                 <div
                     style={{
+                        marginTop: '20px',
                         display: 'flex',
                         justifyContent: 'center',
                         alignItems: 'center',
@@ -180,6 +189,35 @@ function UserA({ onNameChange, onClearName }: UserAProps) {
                         ))}
                     </div>
                 )}
+            </div>
+
+            <div
+                style={{
+                    display: 'grid',
+                    gridTemplateColumns: 'repeat(10, 1fr)',
+                    gap: '10px',
+                    marginTop: '40px',
+                    width: '100%',
+                }}
+            >
+                {categoryNames.map((name) => (
+                    <button
+                        key={name}
+                        type="button"
+                        onClick={() => removePlayer(name)}
+                        style={{
+                            padding: '15px 10px',
+                            fontSize: '16px',
+                            color: selectedPlayers.includes(name) ? 'red' : 'white',
+                            cursor: 'pointer',
+                            border: `1px solid ${selectedPlayers.includes(name) ? 'red' : 'white'}`,
+                            borderRadius: '6px',
+                            backgroundColor: 'transparent',
+                        }}
+                    >
+                        {name}
+                    </button>
+                ))}
             </div>
         </div>
     )
