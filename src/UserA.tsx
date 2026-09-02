@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import { calciatori } from './liste/calciatori'
 import { portieri } from './liste/portieri'
 import { difensori } from './liste/difensori'
 import { centrocampisti } from './liste/centrocampisti'
