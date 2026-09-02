@@ -204,7 +204,9 @@ function UserA({ onNameChange, onClearName }: UserAProps) {
                     <button
                         key={name}
                         type="button"
-                        onClick={() => removePlayer(name)}
+                        onClick={() => 
+                            selectedPlayers.includes(name) ? removePlayer(name) : handleNameChange(name)
+                        }
                         style={{
                             padding: '15px 10px',
                             fontSize: '16px',
