@@ -16,6 +16,8 @@ function App() {
   const isUserB = role === 'B'
   const isUserC = role === 'C'
 
+  const blockedUIForUserB = fuoriDallAsta || selectedName === ''
+
   useEffect(() => {
 
     // Caricamento iniziale
@@ -101,10 +103,7 @@ function App() {
   }
 
   async function handleClearName() {
-
-    setSelectedName('')
-    setNumber(0)
-    setLocked(false)
+    handleNameChange('')
   }
 
   // Cambio locale numero
@@ -205,7 +204,7 @@ function App() {
 
             <div style={{ marginBottom: '40px' }}>
 
-              {isUserA || isUserC ? (
+              {isUserC ? (
                 <div>
                   <label style={{
                     fontSize: '100px',
@@ -271,11 +270,11 @@ function App() {
                       onChange={handleNumberChange}
                       style={{
                         width: '100.px',
-                        backgroundColor: fuoriDallAsta ? '#3a3a3a' : '#ffffff',
-                        color: fuoriDallAsta ? '#ffffff' : '#000000',
-                        border: fuoriDallAsta ? '1px solid #555555' : '1px solid #cccccc',
+                        backgroundColor: blockedUIForUserB ? '#3a3a3a' : '#ffffff',
+                        color: blockedUIForUserB ? '#ffffff' : '#000000',
+                        border: blockedUIForUserB ? '1px solid #555555' : '1px solid #cccccc',
                         borderRadius: '6px',
-                        cursor: fuoriDallAsta ? 'not-allowed' : 'text',
+                        cursor: blockedUIForUserB ? 'not-allowed' : 'text',
                         opacity: 1,
                         height: '50px',
                         fontSize: '30px',
@@ -297,7 +296,7 @@ function App() {
                       onClick={
                         () => handleSendOffer(localNumber)
                       }
-                      disabled={!isUserB || fuoriDallAsta}
+                      disabled={blockedUIForUserB}
                       style={{
                         height: 'fit-content',
                         width: 'fit-content',
@@ -311,7 +310,7 @@ function App() {
 
                     <button
                       onClick={handleExit}
-                      disabled={!isUserB || fuoriDallAsta}
+                      disabled={blockedUIForUserB}
                       style={{
                         height: 'fit-content',
                         width: 'fit-content',
