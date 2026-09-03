@@ -59,7 +59,6 @@ export const difensori: string[] = [
     "Kristensen T. (ATA)",
     "Carlos Augusto (INT)",
     "Marusic (LAZ)",
-    "Romagnoli (LAZ)",
     "Bernasconi (ATA)",
     "Bellanova (ATA)",
     "Sugawara (CAG)",

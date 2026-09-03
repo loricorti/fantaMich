@@ -56,6 +56,7 @@ export const centrocampisti: string[] = [
     "Hutchinson (MIL)",
     "Schmid (FRO)",
     "Cambiaghi (BOL)",
+    "El Shaarawy (GEN)",
     "Chukwueze (MIL)",
     "Lobotka (NAP)",
     "Pasalic (ATA)",
