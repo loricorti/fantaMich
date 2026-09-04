@@ -8,6 +8,7 @@ function App() {
   const [number, setNumber] = useState(0)
   const [localNumber, setLocalNumber] = useState(0)
   const [fuoriDallAsta, setLocked] = useState(false)
+  const [isFullscreen, setIsFullscreen] = useState(false)
 
   const params = new URLSearchParams(window.location.search)
   const role = params.get('role')
@@ -19,6 +20,12 @@ function App() {
   const blockedUIForUserB = fuoriDallAsta || selectedName === ''
 
   useEffect(() => {
+
+    function handleFullscreenChange() {
+      setIsFullscreen(Boolean(document.fullscreenElement))
+    }
+
+    document.addEventListener('fullscreenchange', handleFullscreenChange)
 
     // Caricamento iniziale
     async function loadState() {
@@ -74,6 +81,7 @@ function App() {
       })
 
     return () => {
+      document.removeEventListener('fullscreenchange', handleFullscreenChange)
       supabase.removeChannel(channel)
     }
 
@@ -144,6 +152,15 @@ function App() {
     }
   }
 
+  async function handleFullscreen() {
+    if (document.fullscreenElement) {
+      await document.exitFullscreen()
+      return
+    }
+
+    await document.documentElement.requestFullscreen()
+  }
+
 
   return (
     <div
@@ -164,6 +181,45 @@ function App() {
         paddingTop: '20px',
         paddingBottom: '20px',
       }}>
+
+        {isUserC && (
+          <button
+            type="button"
+            onClick={handleFullscreen}
+            aria-label={isFullscreen ? 'Esci da fullscreen' : 'Attiva fullscreen'}
+            title={isFullscreen ? 'Esci da fullscreen' : 'Attiva fullscreen'}
+            style={{
+              position: 'fixed',
+              top: '20px',
+              right: '20px',
+              zIndex: 10,
+              width: '48px',
+              height: '48px',
+              padding: '8px',
+              border: 'none',
+              background: 'transparent',
+              color: '#ffffff',
+              cursor: 'pointer',
+            }}
+          >
+            <svg
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+              style={{
+                display: 'block',
+                width: '100%',
+                height: '100%',
+                fill: 'none',
+                stroke: 'currentColor',
+                strokeWidth: 2,
+                strokeLinecap: 'round',
+                strokeLinejoin: 'round',
+              }}
+            >
+              <path d="M8 3H3v5M16 3h5v5M8 21H3v-5M21 16v5h-5" />
+            </svg>
+          </button>
+        )}
 
         {isUserA ? (
           <UserA
