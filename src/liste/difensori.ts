@@ -1,4 +1,4 @@
-const difensori: string[] = [
+export const difensori: string[] = [
     "Dimarco (INT)",
     "Wesley (ROM)",
     "Molina N. (ROM)",

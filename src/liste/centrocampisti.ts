@@ -1,4 +1,4 @@
-const centrocampisti: string[] = [
+export const centrocampisti: string[] = [
     "Paz N. (COM)",
     "Calhanoglu (INT)",
     "McTominay (NAP)",

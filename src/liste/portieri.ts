@@ -1,4 +1,4 @@
-const portieri: string[] = [
+export const portieri: string[] = [
     "Svilar (ROM)",
     "Vicario (JUV)",
     "Martinez Jo. (INT)",

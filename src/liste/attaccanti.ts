@@ -1,4 +1,4 @@
-const attaccanti: string[] = [
+export const attaccanti: string[] = [
     "Malen (ROM)",
     "Martinez L. (INT)",
     "Hojlund (NAP)",
