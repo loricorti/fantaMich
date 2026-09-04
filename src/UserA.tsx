@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { portieri } from './liste/portieri'
 import { difensori } from './liste/difensori'
 import { centrocampisti } from './liste/centrocampisti'
@@ -13,7 +13,15 @@ function UserA({ onNameChange, onClearName }: UserAProps) {
     const [selectedCategory, setSelectedCategory] = useState('Portieri')
     const [searchText, setSearchText] = useState('')
     const [showSuggestions, setShowSuggestions] = useState(false)
-    const [selectedPlayers, setSelectedPlayers] = useState<string[]>([])
+    const [selectedPlayers, setSelectedPlayers] = useState<string[]>(() => {
+        const saved = localStorage.getItem("selectedPlayers");
+        return saved ? JSON.parse(saved) : [];
+    });
+
+    useEffect(() => {
+        console.log("Salvo:", selectedPlayers);
+        localStorage.setItem("selectedPlayers", JSON.stringify(selectedPlayers));
+    }, [selectedPlayers]);
 
     const categoryNames =
         selectedCategory === 'Portieri' ? portieri :
@@ -204,7 +212,7 @@ function UserA({ onNameChange, onClearName }: UserAProps) {
                     <button
                         key={name}
                         type="button"
-                        onClick={() => 
+                        onClick={() =>
                             selectedPlayers.includes(name) ? removePlayer(name) : handleNameChange(name)
                         }
                         style={{
